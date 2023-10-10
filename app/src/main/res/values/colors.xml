@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="cream_200">#EDDFCC</color>
+    <color name="cream_500">#E3D6C3</color>
+    <color name="green">#C9E8B9</color>
+    <color name="mocha">#3F261D</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#D30000</color>
+    <color name="primary">#EDDFCC</color>
+</resources>
