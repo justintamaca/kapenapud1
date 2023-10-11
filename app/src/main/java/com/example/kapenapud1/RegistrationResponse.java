@@ -1,20 +1,19 @@
 package com.example.kapenapud1;
 
-import com.google.gson.annotations.SerializedName;
-
 public class RegistrationResponse {
-
-    @SerializedName("success")
     private boolean success;
-
-    @SerializedName("error")
-    private String error;
+    private String message;
+    private String token;
 
     public boolean isSuccess() {
         return success;
     }
 
-    public String getError() {
-        return error;
+    public String getMessage() {
+        return message;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

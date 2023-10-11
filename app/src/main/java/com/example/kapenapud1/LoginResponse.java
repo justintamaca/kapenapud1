@@ -1,32 +1,26 @@
 package com.example.kapenapud1;
 
-import android.service.autofill.UserData;
-
 import com.google.gson.annotations.SerializedName;
 
 public class LoginResponse {
+    @SerializedName("status")
+    private boolean status;
 
-    @SerializedName("success")
-    private boolean success;
+    @SerializedName("message")
+    private String message;
 
-    @SerializedName("error")
-    private String error;
-
-    @SerializedName("data")
-    private UserData userData; // Assuming you receive user data upon successful login
+    @SerializedName("token")
+    private String token;
 
     public boolean isSuccess() {
-        return success;
+        return status;
     }
 
-    public String getError() {
-        return error;
+    public String getMessage() {
+        return message;
     }
 
-    public UserData getUserData() {
-        return userData;
+    public String getToken() {
+        return token;
     }
-
-    // You can include additional getters for specific user data fields if needed
 }
-

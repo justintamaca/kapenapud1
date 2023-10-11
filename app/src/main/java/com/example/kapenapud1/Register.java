@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.google.gson.Gson;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -94,31 +97,17 @@ public class Register extends AppCompatActivity {
             @Override
             public void onResponse(Call<RegistrationResponse> call, Response<RegistrationResponse> response) {
                 if (response.isSuccessful()) {
-                    RegistrationResponse registrationResponse = response.body();
-                    if (registrationResponse != null && registrationResponse.isSuccess()) {
-                        // Registration successful
-                        userInfoTextView.setText("Registration successful!");
-                    } else {
-                        // Registration failed (handle error message from registrationResponse)
-                        String errorMessage = (registrationResponse != null) ? registrationResponse.getError() : "Unknown error";
-                        userInfoTextView.setText("Registration failed. Error: " + errorMessage);
-                    }
+                    userInfoTextView.setText("Registered successfully!");
                 } else {
-                    // Handle non-successful response (e.g., status code other than 201)
                     userInfoTextView.setText("Registration failed. Unexpected response: " + response.code());
                 }
-
-                // Log the response body for debugging
-                Log.d("RegistrationResponse", "Response Body: " + response.raw().toString());
             }
-
-
 
             @Override
             public void onFailure(Call<RegistrationResponse> call, Throwable t) {
-                // Handle failure (e.g., network error)
                 userInfoTextView.setText("Registration failed. Check your internet connection.");
             }
         });
+
     }
 }

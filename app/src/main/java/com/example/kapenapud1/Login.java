@@ -22,16 +22,14 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
 
-        // Find the TextView by its ID
         TextView registerTextView = findViewById(R.id.registerTextView);
 
-        // Set an OnClickListener to the TextView
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create an Intent to navigate to the Register activity
+
                 Intent intent = new Intent(Login.this, Register.class);
-                // Start the Register activity
+
                 startActivity(intent);
             }
         });
@@ -66,7 +64,6 @@ public class Login extends AppCompatActivity {
                 return;
             }
 
-            // If input is valid, proceed with login
             performLogin(email, password);
         });
     }
@@ -80,36 +77,34 @@ public class Login extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
                     LoginResponse loginResponse = response.body();
-                    if (loginResponse != null && loginResponse.isSuccess()) {
-                        // Login successful
-                        // You can access user-specific data here if provided by the API
-                        // For example, loginResponse.getUserData() if it's available
-                        userInfoTextView.setText("Login successful!");
+                    if (loginResponse != null) {
+                        String message = loginResponse.getMessage();
+                        if (loginResponse.isSuccess()) {
+                            userInfoTextView.setText("Login successful!");
 
-                        // Navigate to the main application screen or other relevant activity
-                        // Intent mainIntent = new Intent(Login.this, MainActivity.class);
-                        // startActivity(mainIntent);
+                            Intent intent = new Intent(Login.this, Dashboard.class);
+                            startActivity(intent);
+                        } else {
+                            userInfoTextView.setText("Login failed. Error: " + message);
+                        }
                     } else {
-                        // Login failed (handle error message from loginResponse)
-                        userInfoTextView.setText("Login failed. Error: " + loginResponse.getError());
+                        userInfoTextView.setText("Login failed. Please try again later.");
                     }
                 } else {
-                    // Handle error (e.g., network error, server error)
-                    userInfoTextView.setText("Login failed. Please try again later.");
+                    userInfoTextView.setText("Login failed. Check your internet connection.");
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                // Handle failure (e.g., network error)
                 userInfoTextView.setText("Login failed. Check your internet connection.");
             }
         });
     }
 
-    private boolean isValidEmail(String email) {
-        // Implement email validation logic here (e.g., using regex)
-        // For simplicity, we check if the email contains "@" symbol
+
+
+        private boolean isValidEmail(String email) {
         return email.contains("@");
     }
 }

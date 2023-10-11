@@ -17,7 +17,7 @@ public interface ApiService {
     Call<List<Product>> getProducts();
 
     @FormUrlEncoded
-    @POST("users") // Update the endpoint to "users"
+    @POST("register") // Update the endpoint to "users"
     Call<RegistrationResponse> registerUser(
             @Field("name") String name,
             @Field("email") String email,
@@ -26,7 +26,7 @@ public interface ApiService {
     );
 
     @FormUrlEncoded
-    @POST("users")
+    @POST("login")
     Call<LoginResponse> loginUser(
             @Field("email") String email,
             @Field("password") String password

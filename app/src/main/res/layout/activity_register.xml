@@ -108,13 +108,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="92dp"
         android:text=""
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signup"
-        app:layout_constraintVertical_bias="0.176" />
+        app:layout_constraintVertical_bias="0.228" />
 
     <ToggleButton
         android:id="@+id/showpass"

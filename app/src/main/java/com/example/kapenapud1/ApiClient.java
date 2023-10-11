@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "https://kapenapud.com/api/";
+    private static final String BASE_URL = "https://kapenapud.com/api/auth/";
 
     public static Retrofit getClient() {
         if (retrofit == null) {
