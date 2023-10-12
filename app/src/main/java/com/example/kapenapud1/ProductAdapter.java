@@ -20,10 +20,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         this.context = context;
         this.products = products;
     }
-    public void setData(List<Product> newProducts) {
+    public void setProducts(List<Product> newProducts) {
         products.clear();
         products.addAll(newProducts);
-        notifyDataSetChanged(); // Notify the adapter of data changes
+        notifyDataSetChanged();
     }
 
     @NonNull

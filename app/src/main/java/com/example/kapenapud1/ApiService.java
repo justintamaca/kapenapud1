@@ -11,10 +11,11 @@ import retrofit2.http.Query;
 
 public interface ApiService {
     @GET("categories")
-    Call<List<Category>> getCategories();
+    Call<CategoryResponse> getCategories();
 
     @GET("products")
-    Call<List<Product>> getProducts();
+    Call<ProductResponse> getProducts();
+    Call<ProductResponse> getProductsByCategory(@Query("category") String category);
 
     @FormUrlEncoded
     @POST("register") // Update the endpoint to "users"

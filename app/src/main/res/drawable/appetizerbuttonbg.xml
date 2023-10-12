@@ -1,0 +1,15 @@
+<!-- custom_button_background.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="#FFC107" /> <!-- Change the background color when pressed -->
+            <corners android:radius="8dp" /> <!-- Adjust the corner radius for rounded corners -->
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="@color/white" /> <!-- Change the default background color -->
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+</selector>
