@@ -6,7 +6,9 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -16,6 +18,12 @@ public interface ApiService {
     @GET("products")
     Call<ProductResponse> getProducts();
     Call<ProductResponse> getProductsByCategory(@Query("category") String category);
+
+    @GET("users")
+    Call<UserResponse> getUserData();
+
+    @GET("customers")
+    Call<CustomerResponse> getCustomers();
 
     @FormUrlEncoded
     @POST("register") // Update the endpoint to "users"

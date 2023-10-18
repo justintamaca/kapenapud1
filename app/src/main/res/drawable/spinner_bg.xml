@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <!-- Background color for the spinner -->
+                <shape>
+                    <solid android:color="#DDDDDD" /> <!-- Customize the color as per your design -->
+                    <corners android:radius="4dp" /> <!-- Customize the corner radius -->
+                </shape>
+            </item>
+            <item android:right="8dp">
+                <!-- Drop-down arrow icon on the right side of the spinner -->
+                <bitmap android:src="@drawable/baseline_arrow_drop_down_circle_24" /> <!-- Customize the arrow icon -->
+            </item>
+        </layer-list>
+    </item>
+</selector>

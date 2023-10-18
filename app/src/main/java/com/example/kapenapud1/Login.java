@@ -1,12 +1,18 @@
 package com.example.kapenapud1;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -14,6 +20,7 @@ import retrofit2.Response;
 public class Login extends AppCompatActivity {
 
     private ApiService apiService;
+    private ApiService apiService1;
     private EditText emailEditText, passwordEditText;
     private TextView userInfoTextView;
 
@@ -27,19 +34,19 @@ public class Login extends AppCompatActivity {
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(Login.this, Register.class);
-
                 startActivity(intent);
             }
         });
 
         // Initialize ApiService
         apiService = ApiClient.getClient().create(ApiService.class);
+        apiService1 = RetrofitClient.getClient().create(ApiService.class);
 
         // Initialize UI elements
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
+        String enteredPassword = passwordEditText.getText().toString();
         userInfoTextView = findViewById(R.id.userInfoTextView1);
         Button loginButton = findViewById(R.id.loginButton);
 
@@ -51,11 +58,6 @@ public class Login extends AppCompatActivity {
 
             if (email.isEmpty()) {
                 emailEditText.setError("Email is required");
-                return;
-            }
-
-            if (!isValidEmail(email)) {
-                emailEditText.setError("Invalid email address");
                 return;
             }
 
@@ -82,8 +84,40 @@ public class Login extends AppCompatActivity {
                         if (loginResponse.isSuccess()) {
                             userInfoTextView.setText("Login successful!");
 
-                            Intent intent = new Intent(Login.this, Dashboard.class);
-                            startActivity(intent);
+                            // Make a separate API request to get the user's data
+                            Call<UserResponse> userDataCall = apiService1.getUserData();
+                            userDataCall.enqueue(new Callback<UserResponse>() {
+                                @Override
+                                public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        UserResponse userResponse = response.body();
+                                        List<User> users = userResponse.getData();
+
+                                        // Find the user with matching login credentials
+                                        User loggedInUser = findUserByEmail(users, email);
+
+                                        if (loggedInUser != null) {
+                                            // Store user data in shared preferences
+                                            storeUserData(loggedInUser.getName(), email);
+
+                                            // Navigate to the Dashboard
+                                            Intent intent = new Intent(Login.this, Dashboard.class);
+                                            startActivity(intent);
+                                        } else {
+                                            // Handle the case when the user is not found
+                                            userInfoTextView.setText("User not found.");
+                                        }
+                                    } else {
+                                        // Handle API error
+                                        userInfoTextView.setText("Login failed. Check your internet connection.");
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<UserResponse> call, Throwable t) {
+                                    userInfoTextView.setText("Login failed. Check your internet connection.");
+                                }
+                            });
                         } else {
                             userInfoTextView.setText("Login failed. Error: " + message);
                         }
@@ -102,9 +136,20 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    private User findUserByEmail(List<User> users, String email) {
+        for (User user : users) {
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+        return null; // User not found
+    }
 
-
-        private boolean isValidEmail(String email) {
-        return email.contains("@");
+    private void storeUserData(String name, String email) {
+        SharedPreferences sharedPref = getSharedPreferences("userData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("name", name);
+        editor.putString("email", email);
+        editor.apply();
     }
 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout categoriesLayout;
     private RecyclerView productRecyclerView;
     private ProductAdapter productAdapter;
+    private List<Product> selectedProducts = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         categoriesLayout = findViewById(R.id.buttonlayout);
         productRecyclerView = findViewById(R.id.productsrecyclerview);
 
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.botNatView);
         bottomNavigationView.setSelectedItemId(R.id.bot_menu);
 
@@ -46,7 +50,32 @@ public class MainActivity extends AppCompatActivity {
         productRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         productRecyclerView.setAdapter(productAdapter);
 
-        // Initialize Retrofit and API service
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.bot_home) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bot_menu) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bot_cart) {
+                startActivity(new Intent(getApplicationContext(), CartActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bot_profile) {
+                startActivity(new Intent(getApplicationContext(), Profile.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            }else
+                return false;
+        });
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://kapenapud.com/api/") // Replace with your API base URL
                 .addConverterFactory(GsonConverterFactory.create())
@@ -142,10 +171,15 @@ public class MainActivity extends AppCompatActivity {
     private List<Product> filterProductsByCategory(List<Product> products, int categoryId) {
         List<Product> filteredProducts = new ArrayList<>();
         for (Product product : products) {
-            if (product.getCategory_id() == categoryId) {
+            if (product.getCategory_id() == categoryId && "yes".equalsIgnoreCase(product.getAvailability())) {
                 filteredProducts.add(product);
             }
         }
+
+        // Update the adapter's data and notify it of the data change
+        productAdapter.setProducts(filteredProducts);
+        productAdapter.notifyDataSetChanged();
+
         return filteredProducts;
     }
 }

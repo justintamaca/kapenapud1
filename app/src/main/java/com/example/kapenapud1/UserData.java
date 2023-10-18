@@ -14,6 +14,8 @@ public class UserData {
     private String email;
 
     // Add other user-specific fields here
+    @SerializedName("password")
+    private String password;
 
     public int getId() {
         return id;
@@ -25,6 +27,10 @@ public class UserData {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     // Include getters for other fields as needed
