@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.bot_menu);
 
         productAdapter = new ProductAdapter(this, new ArrayList<>());
-        productRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        productRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         productRecyclerView.setAdapter(productAdapter);
 
 

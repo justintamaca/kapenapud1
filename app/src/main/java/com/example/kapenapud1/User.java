@@ -5,6 +5,7 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private int userId;
 
     public User(int id, String name, String email, String password) {
         this.id = id;
@@ -28,4 +29,10 @@ public class User {
     public String getPassword() {
         return password;
     }
+
+    public int getUserId() {
+        return userId;
+    }
+
+
 }

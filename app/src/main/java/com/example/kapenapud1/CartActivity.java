@@ -3,28 +3,39 @@ package com.example.kapenapud1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.content.Context;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class CartActivity extends AppCompatActivity {
     private RecyclerView cartRecyclerView;
     private CartAdapter cartAdapter;
     private List<CartItem> cartItems;
+    private Spinner paymentMethodSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+
+        Spinner paymentMethodSpinner = findViewById(R.id.paymentMethodSpinner);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.botNatView);
         bottomNavigationView.setSelectedItemId(R.id.bot_cart);
@@ -52,6 +63,7 @@ public class CartActivity extends AppCompatActivity {
             return false;
         });
 
+
         ImageView backButton = findViewById(R.id.cartback);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +71,42 @@ public class CartActivity extends AppCompatActivity {
                 Intent intent = new Intent(CartActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://kapenapud.com/api/") // Replace with your API base URL
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        Call<PaymentResponse> call = apiService.getPaymentOptions();
+
+        call.enqueue(new Callback<PaymentResponse>() {
+            @Override
+            public void onResponse(Call<PaymentResponse> call, Response<PaymentResponse> response) {
+                if (response.isSuccessful()) {
+                    PaymentResponse paymentResponse = response.body();
+                    if (paymentResponse != null) {
+                        List<PaymentMethod> paymentMethods = paymentResponse.getData();
+
+                        // Create an ArrayAdapter and set it to the Spinner
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(CartActivity.this, android.R.layout.simple_spinner_item);
+                        for (PaymentMethod method : paymentMethods) {
+                            adapter.add(method.getPaymentMethod());
+                        }
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        paymentMethodSpinner.setAdapter(adapter);
+                    }
+                } else {
+                    // Handle API call error
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PaymentResponse> call, Throwable t) {
+                // Handle API call failure
             }
         });
 
@@ -83,9 +131,30 @@ public class CartActivity extends AppCompatActivity {
             checkoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Implement the checkout process (e.g., launch a new activity or fragment)
+                    // Get the selected products
+                    List<Product> selectedProducts = Cart.getInstance().getCartItems();
+
+                    // Calculate total price (not subtotal), sales tax, and total price
+                    double total = calculateTotalPrice(selectedProducts);
+                    double salesTax = 0.12 * total;
+
+                    // Get the selected payment method from the spinner
+                    String selectedPaymentMethod = paymentMethodSpinner.getSelectedItem().toString();
+
+                    // Create an Intent to start the CheckoutActivity
+                    Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+                    intent.putExtra("selectedProducts", new ArrayList<>(selectedProducts));
+                    intent.putExtra("subtotal", total); // Changed to "total" as it's the total price
+                    intent.putExtra("salesTax", salesTax);
+                    intent.putExtra("totalPrice", total);
+                    intent.putExtra("paymentMethod", selectedPaymentMethod);
+
+                    // Start the CheckoutActivity
+                    startActivity(intent);
                 }
+
             });
+
         } else {
             // Handle the case when the cart is empty
             // For example, show a message to the user or return to the product list.
@@ -101,21 +170,36 @@ public class CartActivity extends AppCompatActivity {
         return cartItems;
     }
 
-    // Implement a method to calculate the subtotal
-    private double calculateSubtotal(List<CartItem> items) {
-        if (items == null) {
+    // Calculate the subtotal based on selected cart items
+    private double calculateSubtotal(List<CartItem> cartItems) {
+        if (cartItems == null) {
             return 0.0;
         }
 
-        // Replace with your logic to calculate the subtotal
         double subtotal = 0.0;
-        for (CartItem cartItem : items) {
+        for (CartItem cartItem : cartItems) {
             double price = cartItem.getQuantity() * cartItem.getProductPrice();
             subtotal += price;
         }
         return subtotal;
     }
 
+    // Calculate the total price based on selected products
+    // Calculate the total price based on selected products
+    private double calculateTotalPrice(List<Product> selectedProducts) {
+        double total = 0.0;
+
+        for (Product product : selectedProducts) {
+            // Assuming your Product class has a getPrice() method
+            total += Double.parseDouble(product.getPrice());
+        }
+
+        return total;
+    }
+
+
+
+    // Update the displayed prices
     protected void updatePrices() {
         // Calculate and update prices based on cartItems
         double subtotal = calculateSubtotal(cartItems);
@@ -130,4 +214,5 @@ public class CartActivity extends AppCompatActivity {
         salesTaxTextView.setText("₱" + String.format("%.2f", salesTax));
         totalTextView.setText("₱" + String.format("%.2f", total));
     }
+
 }

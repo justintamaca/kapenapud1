@@ -32,7 +32,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
-
         ImageButton plusButton = holder.itemView.findViewById(R.id.plusButton);
         ImageButton minusButton = holder.itemView.findViewById(R.id.minusButton);
         TextView quantityTextView = holder.itemView.findViewById(R.id.quantitycart);
@@ -67,7 +66,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             }
         });
     }
-
 
     @Override
     public int getItemCount() {

@@ -25,6 +25,9 @@ public interface ApiService {
     @GET("customers")
     Call<CustomerResponse> getCustomers();
 
+    @GET("payment")
+    Call<PaymentResponse> getPaymentOptions();
+
     @FormUrlEncoded
     @POST("register") // Update the endpoint to "users"
     Call<RegistrationResponse> registerUser(
@@ -40,6 +43,9 @@ public interface ApiService {
             @Field("email") String email,
             @Field("password") String password
     );
+
+    @POST("order/checkout")
+    Call<CheckoutResponse> checkoutOrder(@Body CheckoutRequest checkoutRequest);
 
 
 }

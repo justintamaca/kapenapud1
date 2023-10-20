@@ -24,6 +24,8 @@ public class Cart {
     }
 
     public List<Product> getCartItems() {
+
         return cartItems;
     }
+
 }

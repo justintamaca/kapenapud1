@@ -10,28 +10,28 @@
     app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="167dp"
+        android:layout_height="219dp">
 
         <ImageView
             android:id="@+id/productimage"
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
+            android:layout_width="166dp"
+            android:layout_height="112dp"
             android:scaleType="centerCrop"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/productname"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/productname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:gravity="center"
             android:maxLines="2"
             android:text="This is a longer category name that should fit within the card"
             android:textColor="@android:color/black"
-            android:gravity="center"
             android:textSize="13sp"
             android:textStyle="bold|italic"
             app:layout_constraintBottom_toTopOf="@+id/productdesc"
@@ -45,14 +45,14 @@
             android:layout_marginLeft="3dp"
             android:layout_marginTop="4dp"
             android:ellipsize="end"
+            android:gravity="center"
             android:maxLines="2"
             android:text="Description goes here"
-            android:gravity="center"
             android:textColor="@android:color/black"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/productPrice"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/productPrice"
@@ -64,8 +64,8 @@
             android:textColor="@android:color/black"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/addToCartButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/addToCartButton"

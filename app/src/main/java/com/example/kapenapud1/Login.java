@@ -98,7 +98,9 @@ public class Login extends AppCompatActivity {
 
                                         if (loggedInUser != null) {
                                             // Store user data in shared preferences
-                                            storeUserData(loggedInUser.getName(), email);
+                                            storeUserData(loggedInUser);
+
+
 
                                             // Navigate to the Dashboard
                                             Intent intent = new Intent(Login.this, Dashboard.class);
@@ -145,11 +147,13 @@ public class Login extends AppCompatActivity {
         return null; // User not found
     }
 
-    private void storeUserData(String name, String email) {
+    private void storeUserData(User user) {
         SharedPreferences sharedPref = getSharedPreferences("userData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("name", name);
-        editor.putString("email", email);
+        editor.putInt("userId", user.getUserId());
+        editor.putString("name", user.getName());
+        editor.putString("email", user.getEmail());
+        editor.putString("password", user.getPassword());
         editor.apply();
     }
 }
